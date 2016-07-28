@@ -1,0 +1,14 @@
+<com.example.mycamera.RootViewLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/MainActivityLayout"
+    tools:context="com.example.mycamera.MycameraMainActivity" >
+        <TextureView
+            android:id="@+id/preview_surfacetexture"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+        <include layout="@layout/control_bar_wrapper"/>"
+              
+</com.example.mycamera.RootViewLayout>
