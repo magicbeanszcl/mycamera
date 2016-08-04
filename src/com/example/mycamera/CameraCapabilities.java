@@ -42,4 +42,8 @@ private void Createpicturesize(Parameters p){
 public ArrayList<Size> getSupportedPreviewSize(){
 	return mSupportedPreviewSize;
 }
+
+public ArrayList<Size> getSupportedPictureSize(){
+	return mSupportedPictureSize;
+}
 }

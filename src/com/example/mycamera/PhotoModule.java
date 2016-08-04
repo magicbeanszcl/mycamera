@@ -59,7 +59,7 @@ public class PhotoModule {
 		initializeCameraCapabilities();
 		mCameraProxy.setSurfaceTexture(mMainActivity.getCameraUI().getsurfacetexture());
 		SetPreviewOrientation();
-		updatePicturePreviewsizeParas();
+		updatePicturesizeParas();
 		StartPreview();
 	}
 	
@@ -81,15 +81,18 @@ public class PhotoModule {
 		mCameraSettings = mCameraProxy.getCameraSettings();
 	}
 	
-	public void updatePicturePreviewsizeParas(){
-		ArrayList<Size> SupportedSizes = mCameraCapabilities.getSupportedPreviewSize();
+	public void updatePicturesizeParas(){
+		ArrayList<Size> SupportedPreviewSizes = mCameraCapabilities.getSupportedPreviewSize();
+		ArrayList<Size> SupportedPictureSize = mCameraCapabilities.getSupportedPictureSize();
 		double targetratio = (double)4/3;
-		Size optimalsize = getOptimalPreviewSize(SupportedSizes,targetratio);
-		Log.v("PhotoModule","optimalsize width "+optimalsize.width()+" height "+optimalsize.height());
-		mCameraSettings.setPreviewSize(optimalsize);
+		Size optimalpreviewsize = getOptimalPreviewSize(SupportedPreviewSizes,targetratio);
+		Size optimalpicturesize = getOptimalPictureSize(SupportedPictureSize,targetratio);
+		Log.v(Tag,"optimalsize width "+optimalpicturesize.width()+" height "+optimalpicturesize.height());
+		mCameraSettings.setPreviewSize(optimalpreviewsize);
+		mCameraSettings.setPictureSize(optimalpicturesize);
 		mCameraProxy.applySettings(mCameraSettings);
-		Log.v("PhotoModule","AspectRatio"+(float)optimalsize.width()/(float)optimalsize.height());
-		mMainActivity.updatePreviewAspectRatio((float)optimalsize.width()/(float)optimalsize.height());
+		Log.v(Tag,"AspectRatio"+(float)optimalpreviewsize.width()/(float)optimalpreviewsize.height());
+		mMainActivity.updatePreviewAspectRatio((float)optimalpreviewsize.width()/(float)optimalpreviewsize.height());
 	}
 	
 	public  void SetPreviewOrientation(){
@@ -103,16 +106,48 @@ public class PhotoModule {
 		}else if(mCurrentCamerainfor.isfacingback()){
 			result = (mSensorOrientation - mDisplayRotation + 360)%360;
 		}else{
-			Log.e("PhotoModule", "Camera facing is not sure!");
+			Log.e(Tag, "Camera facing is not sure!");
 		}
-		Log.v("PhotoModule", "display rotation is "+mDisplayRotation+" sensor rotation is "+mSensorOrientation+"result "+result);
+		Log.v(Tag, "display rotation is "+mDisplayRotation+" sensor rotation is "+mSensorOrientation+"result "+result);
 		mCameraProxy.setDisplayOrientation(result);
 	}
 	
+	public Size getOptimalPictureSize(ArrayList<Size> sizes,double targetratio){
+		int Ratio4X3Resolution = 0;
+		int Ratio16X9Resolution = 0;
+		Size Max4X3Resolution = new Size(0,0);
+		Size Max16X9Resolution = new Size(0,0);
+		double ratio4X3 = (double)(4/3);
+		double ratio16X9 = (double)(16/9);
+		double Ratiodiff = 0.1;
+		for(Size size:sizes){
+			double currentsizeratio = (float)size.width()/(float)size.height();
+			int currentsizeresolution = size.width()*size.height();
+			if(Math.abs(currentsizeratio - ratio4X3) < Ratiodiff){
+				if(currentsizeresolution > Ratio4X3Resolution){
+					Max4X3Resolution = size;
+					Ratio4X3Resolution = currentsizeresolution;
+				}
+			}
+			else if(Math.abs(currentsizeratio - ratio4X3) < Ratiodiff){
+				if(currentsizeresolution > Ratio16X9Resolution){
+					Max16X9Resolution = size;
+					Ratio16X9Resolution = currentsizeresolution;
+				}
+			}
+		}
+		if(Math.abs(targetratio - ratio4X3) < Ratiodiff){
+		return Max4X3Resolution;
+		}
+		else if(Math.abs(targetratio - ratio16X9) < Ratiodiff){
+		return Max16X9Resolution;	
+		}
+		return Max4X3Resolution;
+	}
 	public Size getOptimalPreviewSize(ArrayList<Size> sizes,double targetratio){
 		final double MATCH_TOLERANCE = 0.01;
 		if(sizes == null){
-			Log.e("PhotoModule", "get supported preview sizes are null!");
+			Log.e(Tag, "get supported preview sizes are null!");
 		}
 		double minDiff = Double.MAX_VALUE;
 		int optimalSizeindex = -1;
@@ -122,14 +157,14 @@ public class PhotoModule {
 		Size DefaultDisplaySize = new Size(res);
 		
 		int targetHeight = Math.min(DefaultDisplaySize.width(), DefaultDisplaySize.height());
-		Log.w("PhotoModule", "targetHeight "+targetHeight);
+		Log.w(Tag, "targetHeight "+targetHeight);
 		for(int i = 0; i < sizes.size(); i++){
 			Size size = sizes.get(i);
 			double ratio = (double)size.width()/size.height();
 			if(Math.abs(ratio-targetratio) > MATCH_TOLERANCE){
 			   continue;
 			}
-			Log.w("PhotoModule", "ratio "+ratio+" ratio-targetratio "+targetratio);
+			Log.w(Tag, "ratio "+ratio+" ratio-targetratio "+targetratio);
 			double heightDiff = Math.abs(size.height()-targetHeight);
 			if(heightDiff < minDiff){
 				optimalSizeindex = i;
@@ -143,7 +178,7 @@ public class PhotoModule {
 			
 		}
 		if(optimalSizeindex == -1){
-			Log.w("PhotoModule", "No preview size match the ratio!");
+			Log.w(Tag, "No preview size match the ratio!");
 			return null;
 		}
 		return sizes.get(optimalSizeindex); 

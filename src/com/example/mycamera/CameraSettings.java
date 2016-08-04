@@ -43,6 +43,11 @@ public class CameraSettings {
         mCurrentPreviewSize = new Size(previewSize);
         return true;
     }
+    
+    public boolean setPictureSize(Size picturesize){
+    	mCurrentPictureSize = new Size(picturesize);
+    	return true;
+    }
     public Size getCurrentPictureSize() {
         return new Size(mCurrentPictureSize);
     }
