@@ -117,32 +117,38 @@ public class PhotoModule {
 		int Ratio16X9Resolution = 0;
 		Size Max4X3Resolution = new Size(0,0);
 		Size Max16X9Resolution = new Size(0,0);
-		double ratio4X3 = (double)(4/3);
-		double ratio16X9 = (double)(16/9);
+		double ratio4X3 = (double)4/(double)3;
+		double ratio16X9 = (double)16/(double)9;
 		double Ratiodiff = 0.1;
+		//Log.v(Tag,"getOptimalPictureSize "+sizes.get(1));
 		for(Size size:sizes){
 			double currentsizeratio = (float)size.width()/(float)size.height();
 			int currentsizeresolution = size.width()*size.height();
-			if(Math.abs(currentsizeratio - ratio4X3) < Ratiodiff){
+			Log.w(Tag, "ratio "+currentsizeratio+" currentsizeresolution "+currentsizeresolution);
+			double current4X3ratiodiff = Math.abs(currentsizeratio - ratio4X3);
+			double current16X9ratiodiff = Math.abs(currentsizeratio - ratio16X9);
+			if(current4X3ratiodiff < Ratiodiff){
 				if(currentsizeresolution > Ratio4X3Resolution){
 					Max4X3Resolution = size;
 					Ratio4X3Resolution = currentsizeresolution;
 				}
 			}
-			else if(Math.abs(currentsizeratio - ratio4X3) < Ratiodiff){
+			else if(current16X9ratiodiff < Ratiodiff){
 				if(currentsizeresolution > Ratio16X9Resolution){
 					Max16X9Resolution = size;
 					Ratio16X9Resolution = currentsizeresolution;
 				}
 			}
 		}
+		
 		if(Math.abs(targetratio - ratio4X3) < Ratiodiff){
-		return Max4X3Resolution;
+		    return Max4X3Resolution;
 		}
 		else if(Math.abs(targetratio - ratio16X9) < Ratiodiff){
-		return Max16X9Resolution;	
+		    return Max16X9Resolution;	
+		}else{
+			return Max4X3Resolution;
 		}
-		return Max4X3Resolution;
 	}
 	public Size getOptimalPreviewSize(ArrayList<Size> sizes,double targetratio){
 		final double MATCH_TOLERANCE = 0.01;
@@ -164,7 +170,6 @@ public class PhotoModule {
 			if(Math.abs(ratio-targetratio) > MATCH_TOLERANCE){
 			   continue;
 			}
-			Log.w(Tag, "ratio "+ratio+" ratio-targetratio "+targetratio);
 			double heightDiff = Math.abs(size.height()-targetHeight);
 			if(heightDiff < minDiff){
 				optimalSizeindex = i;

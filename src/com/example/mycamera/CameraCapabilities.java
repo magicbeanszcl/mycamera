@@ -18,6 +18,7 @@ public CameraCapabilities(Parameters cameraParameters){
 	mSupportedPreviewFormats.addAll(cameraParameters.getSupportedPreviewFormats());
 	mSupportedPictureFormats.addAll(cameraParameters.getSupportedPictureFormats());
 	Createpreviewsize(cameraParameters);
+	Createpicturesize(cameraParameters);
 	//mSupportedPreviewSize = cameraParameters.getSupportedPreviewSizes();
 }
 
