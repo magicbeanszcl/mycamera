@@ -259,8 +259,10 @@ class CameraHandler extends Handler implements Camera.ErrorCallback {
         //parameters.setPictureSize(photoSize.width(), photoSize.height());
         Size videoSize = settings.getCurrentVideoSize();
         Size previewSize = settings.getCurrentPreviewSize();
+        String focusmode = settings.getFocusmode();
         parameters.setPreviewSize(previewSize.width(), previewSize.height());
         parameters.setPictureSize(photoSize.width(), photoSize.height());
+        parameters.setFocusMode(focusmode);
     }
     
 	public class CaptureCallback{

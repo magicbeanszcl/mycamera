@@ -6,5 +6,6 @@
     <string name="action_settings">Settings</string>
     <string name="name">Camera</string>
     <string name="photo_folder">/DCIM/Camera/</string>
+    <string name="camera_focusmode_default">continuous-picture</string>
 
 </resources>

@@ -10,7 +10,7 @@ public class CameraSettings {
     protected Size mCurrentVideoSize;
     protected byte mJpegCompressQuality;
     protected int mCurrentPictureFormat;
-    
+    protected String mCurrentFocusmode;
     
     protected CameraSettings(CameraCapabilities mCapabilities){
     
@@ -25,6 +25,7 @@ public class CameraSettings {
                 (src.mCurrentVideoSize == null ? null : new Size(src.mCurrentVideoSize));
         mJpegCompressQuality = src.mJpegCompressQuality;
         mCurrentPictureFormat = src.mCurrentPictureFormat;
+        mCurrentFocusmode = src.mCurrentFocusmode;
     }
     
     public  CameraSettings copy(){
@@ -48,11 +49,20 @@ public class CameraSettings {
     	mCurrentPictureSize = new Size(picturesize);
     	return true;
     }
+    
+    public void setFocusmode(String mfocusmode){
+    	mCurrentFocusmode = mfocusmode;
+    }
+    
     public Size getCurrentPictureSize() {
         return new Size(mCurrentPictureSize);
     }
     
     public Size getCurrentVideoSize() {
         return new Size(mCurrentVideoSize);
+    }
+    
+    public String getFocusmode(){
+    	return mCurrentFocusmode;
     }
 }

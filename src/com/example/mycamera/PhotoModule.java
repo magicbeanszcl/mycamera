@@ -57,6 +57,7 @@ public class PhotoModule {
 		// TODO Auto-generated method stub
 		mCameraProxy = camera;
 		initializeCameraCapabilities();
+		updateparameters();
 		mCameraProxy.setSurfaceTexture(mMainActivity.getCameraUI().getsurfacetexture());
 		SetPreviewOrientation();
 		updatePicturesizeParas();
@@ -70,7 +71,7 @@ public class PhotoModule {
 			public void onPreviewStarted() {
 				// TODO Auto-generated method stub
 				Log.v(Tag, "preview started !");
-				Autofocus();
+				//Autofocus();
 			}	
 		};  
 		mCameraProxy.startpreview(mHandler, startpreviewcallback);
@@ -81,6 +82,9 @@ public class PhotoModule {
 		mCameraSettings = mCameraProxy.getCameraSettings();
 	}
 	
+	public void updateparameters(){
+		mCameraSettings.setFocusmode(mMainActivity.getResources().getString(R.string.camera_focusmode_default));
+	}
 	public void updatePicturesizeParas(){
 		ArrayList<Size> SupportedPreviewSizes = mCameraCapabilities.getSupportedPreviewSize();
 		ArrayList<Size> SupportedPictureSize = mCameraCapabilities.getSupportedPictureSize();
@@ -347,6 +351,7 @@ public class PhotoModule {
 		}
     
     }
+    
 	public void onCameraPaused(){
 		mCameraProxy.stoppreview();
 	}
