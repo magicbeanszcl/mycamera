@@ -74,6 +74,9 @@ public class PhotoModule {
 				//Autofocus();
 			}	
 		};  
+		if(mMainActivity.getResources().getString(R.string.camera_focusmode_default).equals("continuous-picture")){
+			mCameraProxy.cancelautofocus();
+		}
 		mCameraProxy.startpreview(mHandler, startpreviewcallback);
 	}
 	

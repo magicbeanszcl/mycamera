@@ -234,6 +234,9 @@ class CameraHandler extends Handler implements Camera.ErrorCallback {
 			    	mCamera.autoFocus((AutoFocusCallback)msg.obj);
 			    	break;
 			    }
+			    case CameraActions.CANCEL_AUT0_FOCUS:{
+			    	mCamera.cancelAutoFocus();
+			    }
 			    case CameraActions.TAKE_PICTURE:{
 			    	CaptureCallback capturecb = (CaptureCallback)msg.obj;
 			    	mCamera.takePicture(capturecb.mShutter, capturecb.mRaw, capturecb.mPost, capturecb.mJpeg);
@@ -321,6 +324,10 @@ public class CameraProxy{
 		return true;
 	}
 	
+	public void cancelautofocus(){
+		mCameraHandler.removeMessages(CameraActions.AUTO_FOCUS);
+		mCameraHandler.sendMessageAtFrontOfQueue(mCameraHandler.obtainMessage(CameraActions.CANCEL_AUT0_FOCUS));
+	}
 	public void startpreview(Handler h,final StartPreviewCallback cb){
 		try{
 		    mCameraHandler.obtainMessage(CameraActions.START_PREVIEW,StartPreviewCallbackAgent.CreateAgentCallback(h,cb)).sendToTarget();
